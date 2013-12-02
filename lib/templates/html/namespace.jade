@@ -1,0 +1,19 @@
+extends html
+include _common
+
+block navigation
+	- for ns in namespaces
+		- if (ns.classes.length)
+			h5: a(href=level + ns.url) #{ns.name}
+			ul.nav		
+				- for klass in ns.classes
+					- if (!klass.builtin)
+						li: a(href=level + klass.url) #{klass.name}
+
+block content
+	div.page-header
+		h1 Namespace #{namespace.name}
+
+	- if (namespace.classes.length)
+		h3 Classes
+		mixin classes(namespace.classes)

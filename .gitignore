@@ -1,0 +1,10 @@
+node_modules
+.DS_Store
+.svn
+.csdoc.json
+/lib/*.js
+/lib/elements/*.js
+/lib/libraries/*.js
+/lib/templates/*.js
+/lib/templates/html/*.css
+docs

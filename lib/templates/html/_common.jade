@@ -1,0 +1,185 @@
+mixin classes(classes)
+	ul.nav.classes
+		- each klass in classes
+			mixin klass(klass)
+
+mixin klass(klass)
+	li
+		- if (klass.script)
+			p.pull-right.cs-defined
+				small #{klass.script.name}
+					- if (klass.line)
+						span.text-muted , line #{klass.line}
+		
+		- else if (klass.builtin)
+			p.pull-right.cs-defined: small.text-muted built-in
+				
+		h4: a(href=level + klass.url) #{klass.name}
+		
+		div.well
+			- if (klass.description)
+				!= md(klass.description)
+			
+			- else
+				p: em.text-muted This class has no description.
+				
+mixin methods(source, klass)
+	ul.nav.methods
+		- each method in source
+			mixin method(method, klass)					
+												
+mixin method(method, klass)
+	- var paramsHasDesc = false
+	li(class=method.builtin ? 'builtin' : null)
+		- if (method.defined)
+			p.pull-right.cs-defined
+				- if (method.version)
+					small Version: 
+						strong #{method.version}
+					
+				- if (method.defined === klass)
+					small #{method.defined.name}
+				
+				- else
+					small: a(href=level + method.defined.url) #{method.defined.name}
+	
+		h4 #{method.ctor ? klass.name : (klass ? method.name : method.path)}
+			small
+				- if (method.params.length)
+					| &nbsp;(
+					- each param, index in method.params
+						- if (param.description) paramsHasDesc = true
+						- if (index > 0)
+							| , 
+						
+						- if (param.optional)
+							| [
+						
+						| #{param.name}
+						
+						- if (param.n)
+							| 1...#{param.name}N
+						
+						- if (param.type)
+							- if (typeof(param.type) == 'object')
+								- if (param.type === klass)
+									| :#{param.type.name}
+									
+								- else
+									| :
+									a(href=level + param.type.url) #{param.type.name}
+							
+							- else
+								| :#{param.type}
+						
+						- if (param.optional)
+							| ]
+					| )
+				
+				- if (method.ctor)
+					| &nbsp;:&nbsp;#{klass.name}
+				
+				- else
+					- if (method.returns)
+						- if (typeof(method.returns) == 'object')
+							- if (method.returns === klass)
+								| :#{method.returns.name}
+								
+							- else
+								| &nbsp;: 
+								a(href=level + method.returns.url) #{method.returns.name}
+						
+						- else
+							| &nbsp;:&nbsp;#{method.returns}
+					
+					- else
+						| &nbsp;:&nbsp;void
+		
+		div.well
+			- if (method.description)
+				!= md(method.description)
+			
+			- else
+				p: em.text-muted This method has no description.
+			
+			- if (paramsHasDesc)
+				p.text-muted.arguments-title Arguments
+				dl.dl-horizontal.arguments
+					- each param in method.params
+						- if (param.description)
+							dt #{param.name}
+								- if (param.optional)
+									| &nbsp;
+									span.label.label-info [optional]
+							
+							dd 
+								!= md(param.description)
+
+mixin properties(source)
+	ul.nav.properties
+		- each property in source
+			mixin property(property)
+
+mixin property(property)
+	li
+		p.pull-right.cs-defined
+			- if (property.version)
+				small Version: 
+					strong #{property.version}
+						
+			- if (property.defined === klass)
+				small #{property.defined.name}
+			
+			- else
+				small: a(href=level + property.defined.url) #{property.defined.name}
+				
+		h4 #{property.name}
+			small
+				- if (typeof(property.type) == 'object')
+					- if (property.type === klass)
+						| :#{property.type.name}
+						
+					- else
+						| &nbsp;:&nbsp;
+						a(href=level + property.type.url) #{property.type.name}
+				
+				- else
+					| &nbsp;:&nbsp;#{property.type}
+			
+				- if (property.readonly)
+					| &nbsp;
+					span.label.label-info [read-only]
+		
+		div.well
+			- if (property.description)
+				!= md(property.description)
+			
+			- else
+				p: em.text-muted This property has no description.
+
+mixin events(source)
+	ul.nav.events
+		- each event in source
+			mixin event(event)
+
+mixin event(event)
+	li
+		p.pull-right.cs-defined
+			- if (event.version)
+				small Version: 
+					strong #{event.version}
+				
+			- if (event.defined === klass)
+				small #{event.defined.name}
+			
+			- else
+				small: a(href=level + event.defined.url) #{event.defined.name}
+				
+		h4 #{event.name}
+		
+		div.well
+			- if (event.description)
+				!= md(event.description)
+			
+			- else
+				p: em.text-muted This property has no description.
