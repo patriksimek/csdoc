@@ -23,7 +23,8 @@ $ csdoc --template html --dep mdn ./src
 
 * [Using CSDoc from CLI](https://github.com/patriksimek/csdoc/wiki/Using-CSDoc-from-CLI)
 * [Using CSDoc from Node](https://github.com/patriksimek/csdoc/wiki/Using-CSDoc-from-Node)
-* [Example output](https://github.com/patriksimek/csdoc/wiki/Example-output)
+* [JSON Template](https://github.com/patriksimek/csdoc/wiki/JSON-Template)
+* [HTML Template](https://github.com/patriksimek/csdoc/wiki/HTML-Template)
 * [CoffeeDoc compatibility](https://github.com/patriksimek/csdoc/wiki/CoffeeDoc-compatibility)
 
 ```coffeescript
