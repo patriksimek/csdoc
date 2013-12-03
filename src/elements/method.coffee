@@ -35,6 +35,10 @@ class Method
 				@namespace = value
 				@path = if value.length then "#{value.join '.'}.#{@name}" else @name
 			
+			when 'description'
+				# remove blank spaces
+				@description = if value then value.replace(/^\s+|\s+$/g, '') else value
+			
 			when 'params'
 				@params = []
 				for param in value

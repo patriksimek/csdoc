@@ -61,10 +61,15 @@ class Class
 				@namespace = value
 				@path = if value.length then "#{value.join '.'}.#{@name}" else @name
 			
+			when 'description'
+				# remove blank spaces
+				@description = if value then value.replace(/^\s+|\s+$/g, '') else value
+			
 			when 'public', 'private', 'static'
 				@[name] = {}
 				for method in value
 					m = new Method
+					m.defined = @
 					for k, v of method
 						m.set k, v
 					

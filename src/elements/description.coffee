@@ -40,7 +40,7 @@ module.exports = (me) ->
 						p.set 'type', type
 						p.set 'description', arg.join ' '
 						p.set 'optional', optional
-						p.set 'n', n
+						if n then p.set 'n', n
 				
 				when 'returns'
 					type = arg.shift()
