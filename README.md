@@ -1,168 +1,53 @@
 # CSDoc [![Dependency Status](https://david-dm.org/patriksimek/csdoc.png)](https://david-dm.org/patriksimek/csdoc) [![NPM version](https://badge.fury.io/js/csdoc.png)](http://badge.fury.io/js/csdoc)
 
-An API documentation generator for CoffeeScript based on JSDoc for JavaScript. Project is work in intensive progress, any serious usage is not recomended!
+An API documentation generator for CoffeeScript based on JSDoc for JavaScript. Project is work in intensive progress.
+
+Contribution is welcome.
+
+[Live Example](http://csdoc.org) of [examples/sample.coffee](https://github.com/patriksimek/csdoc/blob/master/examples/sample.coffee)
 
 ## Installation
 
     sudo npm install -g csdoc
 
-## Live Example
-[Live Example](http://csdoc.org) of parsed: examples/sample.coffee
+## Quick Examples
 
-## Examples
-
-To create doumentation for one file only:
-```
-$ csdoc ./src/sample.coffe
-```
-
-To create doumentation for all `.coffee` files in folder (recursively):
 ```
 $ csdoc ./src
-```
-
-It also operates over stdio.
-```
 $ csdoc <script.coffee
+$ csdoc <script.coffee >docs.json
+$ csdoc --template html --dep mdn ./src
 ```
 
-script.coffee:
+## Usage
+
+* [Using CSDoc from CLI](https://github.com/patriksimek/csdoc/wiki/Using-CSDoc-from-CLI)
+* [Using CSDoc from Node](https://github.com/patriksimek/csdoc/wiki/Using-CSDoc-from-Node)
+* [Example output](https://github.com/patriksimek/csdoc/wiki/Example-output)
+* [CoffeeDoc compatibility](https://github.com/patriksimek/csdoc/wiki/CoffeeDoc-compatibility)
+
 ```coffeescript
 ###
-Class comment.
+This is a class description.
+
+@property {String} hair Model's hair.
 ###
-class Model
-    ###
-    Function comment.
-    ###
-	test: ->
-```
-output:
-```json
-{
-  "global": {
-    "classes": [
-      {
-        "builtin": true,
-        "name": "Object",
-        "private": [],
-        "public": [
-          {
-            "description": "Create instance of the class.",
-            "name": "constructor",
-            "params": [
-              
-            ]
-          }
-        ],
-        "static": []
-      }
-    ],
-    "methods": []
-  },
-  "modules": [
-    {
-      "classes": [
-        {
-          "builtin": false,
-          "description": "Class comment.\n",
-          "extends": "Object",
-          "name": "Model",
-          "private": [],
-          "public": [
-            {
-              "description": "Create instance of the class.",
-              "name": "constructor",
-              "params": []
-            },
-            {
-              "description": "Function comment.\n",
-              "name": "test",
-              "params": []
-            }
-          ],
-          "static": []
-        }
-      ],
-      "methods": []
-    }
-  ]
-}
+
+class Model extends Object
+	hair: "blonde"
+	
+	###
+	This is a constructor description.
+	
+	@param {String} name Model name.
+	###
+	
+	constructor: (name) ->
 ```
 
 ## Documentation
 
-### CSDoc Tags
-```
-@class										- Create class from method
-@event <name> <description>					- Add event to class
-@extends <type>								- Override default "extends" directive
-@ignore										- Ignore class/method
-@param [<type>] <name> <description>		- Add parameter to method
-@property [<type>] <name> <description>		- Add property to class
-@returns <type>								- Add return value to method
-@see <message> 								- TODO: linking
-@todo <message>								- Just a todo message
-@version <version>							- Version
-```
-
-### Base libraries
-
-```
-$ csdoc --dep mdn
-```
-
-Add JS built-in classes (like String, Function, Number, ...) to docs so data types are linked directly and classes inherits methods from them. More libraries will come soon.
-
-### Output templates
-
-```
-$ csdoc --template html
-```
-
-There are two templates atm - json (default - stdout only) and html (no stdout). html template create html documentation in `docs` subdirectory of your cwd. All data in `docs` subdirectory are deleted during the process!
-
-### Support for CoffeeDoc style comments
-
-```
-$ csdoc --inner
-```
-
-```coffeescript
-###
-Module comment.
-###
-
-class Model
-    ###
-    Class comment.
-    ###
-    
-    test: ->
-        ###
-        Function comment.
-        ###
-```
-
-### .csdoc.json
-
-If there is a `.csdoc.json` in cwd, it starts with options loaded from this file.
-
-```
-$ csdoc
-```
-
-```json
-{
-    "source": "./src",
-    "deps": ["mdn"],
-    "template": "html",
-    "ignore": [
-        "./src/config.coffee",
-        "./src/database.coffee"
-    ]
-}
-```
+Complete documentation can be found on [CSDoc wiki](https://github.com/patriksimek/csdoc/wiki)!
 
 <a name="license" />
 ## License
