@@ -29,41 +29,41 @@ rmdir = (path, self) ->
 		
 		if self then fs.rmdirSync path
 
-setupMethods = (modules) ->
-	html = methodsTemplate
-		title: "Methods"
-		modules: modules
-		level: ""
-		md: md.parse
-
-	fs.writeFileSync "#{options.target}/docs/methods.html", html
-
-setupNamespace = (ns) ->
-	html = nsTemplate
-		title: "Namespace #{ns.name}"
-		namespace: ns
-		classes: classes
-		namespaces: namespaces
-		level: if ns.path.length then ("../" for i in [1..ns.path.length]).join('') else ""
-		md: md.parse
-
-	mkdirp.sync "#{options.target}/docs/#{ns.path.join '/'}"
-	fs.writeFileSync "#{options.target}/docs/#{ns.url}", html
-
-setupClass = (klass) ->
-	html = classTemplate
-		title: "Class #{klass.name}"
-		klass: klass
-		classes: classes
-		namespaces: namespaces
-		subclasses: (k for name, k of classes when k.extends is klass).sort (a, b) -> a.name.localeCompare b.name
-		level: if klass.namespace.length then ("../" for i in [1..klass.namespace.length]).join('') else ""
-		md: md.parse
-
-	fs.writeFileSync "#{options.target}/docs/#{klass.url}", html
-
-module.exports = (doc, opts) ->
-	options = opts
+module.exports = (doc, options, callback) ->
+	setupMethods = (modules) ->
+		html = methodsTemplate
+			title: "Methods"
+			modules: modules
+			level: ""
+			md: md.parse
+	
+		fs.writeFileSync "#{options.target}/docs/methods.html", html
+	
+	setupNamespace = (ns) ->
+		html = nsTemplate
+			title: "Namespace #{ns.name}"
+			namespace: ns
+			classes: classes
+			namespaces: namespaces
+			level: if ns.path.length then ("../" for i in [1..ns.path.length]).join('') else ""
+			md: md.parse
+	
+		mkdirp.sync "#{options.target}/docs/#{ns.path.join '/'}"
+		fs.writeFileSync "#{options.target}/docs/#{ns.url}", html
+	
+	setupClass = (klass) ->
+		html = classTemplate
+			title: "Class #{klass.name}"
+			klass: klass
+			classes: classes
+			namespaces: namespaces
+			subclasses: (k for name, k of classes when k.extends is klass).sort (a, b) -> a.name.localeCompare b.name
+			level: if klass.namespace.length then ("../" for i in [1..klass.namespace.length]).join('') else ""
+			md: md.parse
+	
+		fs.writeFileSync "#{options.target}/docs/#{klass.url}", html
+	
+	# --- HTML Generator ---
 	
 	unless fs.existsSync "#{options.target}/docs"
 		fs.mkdirSync "#{options.target}/docs"
@@ -144,4 +144,4 @@ module.exports = (doc, opts) ->
 	css = fs.readFileSync "#{__dirname}/html/csdoc.css", 'utf8'
 	fs.writeFileSync "#{options.target}/docs/csdoc.css", css
 	
-	"Documentation was successfuly created in '#{options.target}/docs'\n"
+	callback null, "Documentation was successfuly created in '#{options.target}/docs'\n"

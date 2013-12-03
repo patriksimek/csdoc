@@ -8,6 +8,7 @@ setupParam = (doc) ->
 	name: doc.name
 	type: if typeof doc.type is 'object' then doc.type.name else doc.type
 	description: doc.description
+	n: doc.n
 
 setupMethod = (doc) ->
 	name: if doc.defined then doc.name else doc.path
@@ -29,11 +30,11 @@ setupModule = (doc) ->
 	classes: (setupClass(c) for n, c of doc.classes)
 	methods: (setupMethod(m) for n, m of doc.methods)
 
-module.exports = (doc, options) ->
+module.exports = (doc, options, callback) ->
 	object =
 		global:
 			classes: (setupClass(c) for n, c of doc.global.classes)
 			methods: (setupMethod(m) for n, m of doc.global.methods)
 		modules: (setupModule(m) for m in doc.modules)
-
-	JSON.stringify object
+	
+	callback null, JSON.stringify object

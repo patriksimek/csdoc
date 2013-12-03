@@ -29,10 +29,6 @@ optimist = require('optimist')
 	.alias('i', 'inner')
 	.boolean('i')
 	.default('i', false)
-	.describe('j', 'Join scripts to one')
-	.alias('j', 'join')
-	.boolean('j')
-	.default('j', false)
 	.describe('t', 'Use template (json, html)')
 	.alias('t', 'template')
 	.default('t', 'json')
@@ -53,7 +49,7 @@ options =
 	join: optimist.argv.j
 	source: process.cwd()
 	target: process.cwd()
-	deps: optimist.argv.d ? []
+	deps: optimist.argv.d
 	inner: optimist.argv.i
 
 fsdoc = (path, ignore = []) ->
@@ -66,12 +62,30 @@ fsdoc = (path, ignore = []) ->
 		if stat.isDirectory()
 			options.source = path
 			files = readdir path, ignore
-			process.stdout.write csdoc.parse(files, options) ? "Documentation was successfuly created.\n"
+			csdoc files, options, (err, docs) ->
+				if err
+					if optimist.argv.debug
+						console.error err.stack
+					else
+						console.error err.message
+						
+					process.exit 1
+					
+				process.stdout.write docs ? "Documentation was successfuly created.\n"
 			
 		else
 			options.source = require('path').dirname path
 			data = fs.readFileSync path, 'utf8'
-			process.stdout.write csdoc.parse([{path: path, script: data}], options) ? "Documentation was successfuly created.\n"
+			csdoc [{path: path, script: data}], options, (err, docs) ->
+				if err
+					if optimist.argv.debug
+						console.error err.stack
+					else
+						console.error err.message
+						
+					process.exit 1
+				
+				process.stdout.write docs ? "Documentation was successfuly created.\n"
 
 # --- parse from cli ---
 
@@ -95,5 +109,15 @@ process.stdin.on 'data', (chunk) ->
 	buffer += chunk
 	
 process.stdin.on 'end', ->
-	process.stdout.write csdoc.parse([{script: buffer}], options)
+	csdoc buffer, options, (err, docs) ->
+		if err
+			if optimist.argv.debug
+				console.error err.stack
+			else
+				console.error err.message
+				
+			process.exit 1
+		
+		process.stdout.write docs ? "Documentation was successfuly created.\n"
+		
 .resume()
