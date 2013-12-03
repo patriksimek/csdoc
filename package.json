@@ -42,7 +42,7 @@
 		"node": ">=0.8"
 	},
 	"scripts": {
-		"test": "mocha --compilers coffee:coffee-script --reporter spec"
+		"test": "./node_modules/.bin/mocha --compilers coffee:coffee-script --reporter spec"
 	},
 	"bin": {
 		"csdoc": "./bin/csdoc"
