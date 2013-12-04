@@ -4,7 +4,7 @@ An API documentation generator for CoffeeScript inspired by [JSDoc](https://gith
 
 Contribution is welcome.
 
-[Live Example](http://csdoc.org) of [examples/sample.coffee](https://github.com/patriksimek/csdoc/blob/master/examples/sample.coffee)
+[Live Example](http://csdoc.org) of [node-mssql](https://github.com/patriksimek/node-mssql) documentation.
 
 ## Installation
 
