@@ -20,7 +20,7 @@ html
 							span.icon-bar
 							span.icon-bar
 						
-						a.navbar-brand(href=level +'index.html') Documentation
+						a.navbar-brand(href=level +'index.html') #{project}
 					
 					div.collapse.navbar-collapse
 						ul.nav.navbar-nav
@@ -28,6 +28,12 @@ html
 								a(href=level +'index.html') Classes
 							li
 								a(href=level +'methods.html') Methods
+									
+						form.navbar-form.navbar-right
+							div(class="form-group")
+								label(class="checkbox-inline")
+									input(type='checkbox', id='toggle_builtin')
+									| Show built-in
 			
 			div.container
 				div.row
@@ -41,6 +47,18 @@ html
 			div.container
 				p.text-muted.credit Created with 
 					a(href='https://github.com/patriksimek/csdoc') CSDoc
-
+			
+		!= badge
+			
 		script(src='https://code.jquery.com/jquery-1.10.2.min.js')
 		script(src='https://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
+		script.
+			$('#toggle_builtin').change(function() {
+				var enable = $(this).prop('checked');
+				
+				if (enable) {
+					$('.cs-builtin').show();
+				} else {
+					$('.cs-builtin').hide();
+				}
+			});

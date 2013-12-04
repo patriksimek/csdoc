@@ -2,18 +2,12 @@ extends html
 include _common
 
 block navigation
-	- for ns in namespaces
-		- if (ns.classes.length)
-			h5: a(href=level + ns.url) #{ns.name}
-			ul.nav		
-				- for klass in ns.classes
-					- if (!klass.builtin)
-						li: a(href=level + klass.url) #{klass.name}
+	include _menu
 
 block content
 	div.page-header
-		h1 Namespace #{namespace.name}
+		h1.cs-header Namespace #{namespace.name ? namespace.name : "default"}
 
 	- if (namespace.classes.length)
-		h3 Classes
+		h3.cs-header Classes
 		mixin classes(namespace.classes)

@@ -8,10 +8,11 @@ block navigation
 				li: a(href="#") #{module.name}
 
 block content
-	div.page-header
-		h1 Methods
-
-	- for module in modules
-		- if (Object.keys(module.methods).length)
-			h3 #{module.name}
-			mixin methods(module.methods)
+	div.cs-methods
+		div.page-header
+			h1.cs-header Methods
+	
+		- for module in modules
+			- if (Object.keys(module.methods).length)
+				h3.cs-header #{module.name}
+				mixin methods(module.methods)

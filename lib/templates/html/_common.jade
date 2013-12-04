@@ -1,5 +1,5 @@
 mixin classes(classes)
-	ul.nav.classes
+	ul.nav.cs-classes
 		- each klass in classes
 			mixin klass(klass)
 
@@ -24,26 +24,32 @@ mixin klass(klass)
 				p: em.text-muted This class has no description.
 				
 mixin methods(source, klass)
-	ul.nav.methods
+	ul.nav.cs-methods
 		- each method in source
 			mixin method(method, klass)					
 												
 mixin method(method, klass)
 	- var paramsHasDesc = false
-	li(class=method.builtin ? 'builtin' : null)
+	- var builtin = method.builtin ? true : (method.defined && method.defined.builtin ? true : false)
+	- var inherited = method.defined !== klass
+	- var css = []; if (builtin) css.push('cs-builtin'); if (inherited) css.push('cs-inherited');
+	li(class=css.join(' '))
 		- if (method.defined)
 			p.pull-right.cs-defined
-				- if (method.version)
-					small Version: 
-						strong #{method.version}
-					
 				- if (method.defined === klass)
-					small #{method.defined.name}
+					- if (method.version && !builtin)
+						small #{method.defined.name}, Version: #{method.version}
+					
+					- else
+						small #{method.defined.name}
 				
 				- else
 					small: a(href=level + method.defined.url) #{method.defined.name}
+		
+		- else if (method.builtin)
+			p.pull-right.cs-defined: small.text-muted built-in
 	
-		h4 #{method.ctor ? klass.name : (klass ? method.name : method.path)}
+		h4.cs-header #{method.ctor ? klass.name : (klass ? method.name : method.path)}
 			small
 				- if (method.params.length)
 					| &nbsp;(
@@ -96,6 +102,9 @@ mixin method(method, klass)
 						| &nbsp;:&nbsp;void
 		
 		div.well
+			- if (method.deprecated)
+				p: span.label.label-warning deprecated
+				
 			- if (method.description)
 				!= md(method.description)
 			
@@ -103,20 +112,28 @@ mixin method(method, klass)
 				p: em.text-muted This method has no description.
 			
 			- if (paramsHasDesc)
-				p.text-muted.arguments-title Arguments
-				dl.dl-horizontal.arguments
+				p.text-muted.cs-arguments-title Arguments
+				dl.dl-horizontal.cs-arguments
 					- each param in method.params
 						- if (param.description)
 							dt #{param.name}
+								- if (param.params)
+									| (
+									- each pp, ppi in param.params
+										- if (ppi > 0)
+											| , 
+										| #{pp.name}
+									| )
+									
 								- if (param.optional)
 									| &nbsp;
-									span.label.label-info [optional]
+									span.label.label-primary optional
 							
 							dd 
 								!= md(param.description)
 
 mixin properties(source)
-	ul.nav.properties
+	ul.nav.cs-properties
 		- each property in source
 			mixin property(property)
 
@@ -133,7 +150,7 @@ mixin property(property)
 			- else
 				small: a(href=level + property.defined.url) #{property.defined.name}
 				
-		h4 #{property.name}
+		h4.cs-header #{property.name}
 			small
 				- if (typeof(property.type) == 'object')
 					- if (property.type === klass)
@@ -158,7 +175,7 @@ mixin property(property)
 				p: em.text-muted This property has no description.
 
 mixin events(source)
-	ul.nav.events
+	ul.nav.cs-events
 		- each event in source
 			mixin event(event)
 
@@ -175,7 +192,7 @@ mixin event(event)
 			- else
 				small: a(href=level + event.defined.url) #{event.defined.name}
 				
-		h4 #{event.name}
+		h4.cs-header #{event.name}
 		
 		div.well
 			- if (event.description)

@@ -2,95 +2,90 @@ extends html
 include _common
 
 block navigation
-	- for ns in namespaces
-		- if (ns.classes.length)
-			h5: a(href=level + ns.url) #{ns.name}
-			ul.nav		
-				- for klass in ns.classes
-					- if (!klass.builtin)
-						li: a(href=level + klass.url) #{klass.name}
+	include _menu
 
 block content
-	div.page-header
-		h1 #{klass.name}
-
-	dl.dl-horizontal
-		dt Namespace
-		dd
-			- if (klass.namespace.length) 
-				- var nspath = []
-				- each ns in klass.namespace
-					- if (nspath.length)
-						| .
-						
-					- nspath.push(ns)
-					a(href=level + nspath.join('/') +'/index.html') #{ns}
+	div.cs-class
+		div.page-header
+			h1.cs-header #{klass.name}
 	
-	dl.dl-horizontal
-		dt Inheritance
-		dd
-			| #{klass.name}
-			
-			- var parent = klass.extends
-			- while (parent)
-				|  &rarr; 
-				
-				- if (typeof(parent) == 'object')
-					a(href=level + parent.url) #{parent.name}
-					
-				- else
-					| #{parent}
-
-				- parent = parent.extends
-
-	- if (subclasses.length)
 		dl.dl-horizontal
-			dt Subclasses
+			dt Namespace
 			dd
-				- var i = 0
-					- each k in subclasses
-						- if (i++ > 0)
-							| , 
-						
-						a(href=level + k.url) #{k.name}
-	
-	- if (klass.script)
-		dl.dl-horizontal
-			dt Source
-			dd #{klass.script.name}
-				- if (klass.line)
-					span.text-muted , line #{klass.line}
-	
-	- if (klass.version)
-		dl.dl-horizontal
-			dt Version
-			dd #{klass.version}
-	
-	div.well
-		- if (klass.description)
-			!= md(klass.description)
+				- if (klass.namespace.length) 
+					- var nspath = []
+					- each ns in klass.namespace
+						- if (nspath.length)
+							| .
+							
+						- nspath.push(ns)
+						a(href=level + nspath.join('/') +'/index.html') #{ns}
 		
-		- else
-			p: em.text-muted This class has no description.
-
-	- if (klass.public.hasOwnProperty('constructor'))
-		h3 Constructor
-		ul.nav.constructor
-			mixin method(klass.public.constructor, klass)
-			- delete klass.public.constructor
+		dl.dl-horizontal
+			dt Inheritance
+			dd
+				| #{klass.name}
+				
+				- var parent = klass.extends
+				- while (parent)
+					|  &rarr; 
+					
+					- if (typeof(parent) == 'object')
+						a(href=level + parent.url) #{parent.name}
+						
+					- else
+						| #{parent}
 	
-	- if (Object.keys(klass.properties).length)
-		h3 Properties
-		mixin properties(klass.properties)
+					- parent = parent.extends
 	
-	- if (Object.keys(klass.public).length)
-		h3 Public Methods
-		mixin methods(klass.public, klass)
+		- if (subclasses.length)
+			dl.dl-horizontal
+				dt Subclasses
+				dd
+					- var i = 0
+						- each k in subclasses
+							- if (i++ > 0)
+								| , 
+							
+							a(href=level + k.url) #{k.name}
+		
+		- if (klass.script)
+			dl.dl-horizontal
+				dt Source
+				dd #{klass.script.name}
+					- if (klass.line)
+						span.text-muted , line #{klass.line}
+		
+		- if (klass.version)
+			dl.dl-horizontal
+				dt Version
+				dd #{klass.version}
+		
+		div.well
+			- if (klass.description)
+				!= md(klass.description)
+			
+			- else
+				p: em.text-muted This class has no description.
 	
-	- if (Object.keys(klass.static).length)
-		h3 Static Methods
-		mixin methods(klass.static, klass)
-	
-	- if (Object.keys(klass.events).length)
-		h3 Events
-		mixin events(klass.events)
+		- if (Object.prototype.hasOwnProperty.call(klass.public, 'constructor'))
+			h3.cs-header Constructor
+			ul.nav.constructor
+				mixin method(klass.public.constructor, klass)
+				- delete klass.public.constructor
+		
+		- if (Object.keys(klass.properties).length)
+			h3.cs-header Properties
+			mixin properties(klass.properties)
+		
+		- if (Object.keys(klass.public).length)
+			h3.cs-header Public Methods
+			mixin methods(klass.public, klass)
+		
+		- if (Object.keys(klass.static).length)
+			h3.cs-header Static Methods
+			mixin methods(klass.static, klass)
+		
+		- if (Object.keys(klass.events).length)
+			h3.cs-header Events
+			mixin events(klass.events)

@@ -1,0 +1,9 @@
+extends html
+include _common
+
+block navigation
+	include _menu
+
+block content
+	div.cs-index
+		!= md(text.replace(/<a[^>]*>/g, '')).replace(/<h1[^>]*>/g, '<div class="page-header"><h1>').replace(/<\/[^>]*h1>/g, '</h1></div>')

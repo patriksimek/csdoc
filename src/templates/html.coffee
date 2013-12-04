@@ -7,13 +7,6 @@ fs = require 'fs'
 mkdirp = require 'mkdirp'
 md = require 'github-flavored-markdown'
 
-classTemplate = null
-nsTemplate = null
-methodsTemplate = null
-classes = null
-namespaces = null
-options = null
-
 rmdir = (path, self) ->
 	if fs.existsSync path
 		files = fs.readdirSync path
@@ -32,20 +25,27 @@ rmdir = (path, self) ->
 module.exports = (doc, options, callback) ->
 	setupMethods = (modules) ->
 		html = methodsTemplate
-			title: "Methods"
+			title: "Methods | #{options.title}"
 			modules: modules
 			level: ""
+			badge: options.badge
+			project: options.title
 			md: md.parse
 	
 		fs.writeFileSync "#{options.target}/docs/methods.html", html
 	
 	setupNamespace = (ns) ->
+		# dont render docs for default ns when we have index as configured option
+		if not ns.name and options.index then return
+		
 		html = nsTemplate
-			title: "Namespace #{ns.name}"
+			title: "Namespace #{ns.name} | #{options.title}"
 			namespace: ns
 			classes: classes
 			namespaces: namespaces
 			level: if ns.path.length then ("../" for i in [1..ns.path.length]).join('') else ""
+			badge: options.badge
+			project: options.title
 			md: md.parse
 	
 		mkdirp.sync "#{options.target}/docs/#{ns.path.join '/'}"
@@ -53,15 +53,29 @@ module.exports = (doc, options, callback) ->
 	
 	setupClass = (klass) ->
 		html = classTemplate
-			title: "Class #{klass.name}"
+			title: "Class #{klass.name} | #{options.title}"
 			klass: klass
 			classes: classes
 			namespaces: namespaces
 			subclasses: (k for name, k of classes when k.extends is klass).sort (a, b) -> a.name.localeCompare b.name
 			level: if klass.namespace.length then ("../" for i in [1..klass.namespace.length]).join('') else ""
+			badge: options.badge
+			project: options.title
 			md: md.parse
 	
 		fs.writeFileSync "#{options.target}/docs/#{klass.url}", html
+	
+	setupIndex = (text) ->
+		html = indexTemplate
+			title: options.title
+			text: text
+			namespaces: namespaces
+			level: ""
+			badge: options.badge
+			project: options.title
+			md: md.parse
+	
+		fs.writeFileSync "#{options.target}/docs/index.html", html
 	
 	# --- HTML Generator ---
 	
@@ -84,6 +98,11 @@ module.exports = (doc, options, callback) ->
 	jadeTemplate = fs.readFileSync "#{__dirname}/html/methods.jade", 'utf8'
 	methodsTemplate = jade.compile jadeTemplate,
 		filename: "#{__dirname}/html/methods.jade"
+
+	# prepare index template
+	jadeTemplate = fs.readFileSync "#{__dirname}/html/index.jade", 'utf8'
+	indexTemplate = jade.compile jadeTemplate,
+		filename: "#{__dirname}/html/index.jade"
 	
 	classes = []
 	namespaces = []
@@ -139,6 +158,7 @@ module.exports = (doc, options, callback) ->
 		setupClass klass
 	
 	setupMethods [doc.global].concat doc.modules
+	if options.index then setupIndex options.index
 		
 	# copy css (this should be done with cp)
 	css = fs.readFileSync "#{__dirname}/html/csdoc.css", 'utf8'
