@@ -12,6 +12,7 @@ class Method
 		@namespace = []
 		@returns = null
 		@line = 0
+		@deprecated = false
 	
 	###
 	Property setter.
@@ -34,6 +35,10 @@ class Method
 			when 'namespace'
 				@namespace = value
 				@path = if value.length then "#{value.join '.'}.#{@name}" else @name
+			
+			when 'returns'
+				if value is '*' then value = "Object"
+				@returns = value
 			
 			when 'description'
 				# remove blank spaces

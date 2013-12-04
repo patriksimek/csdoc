@@ -13,7 +13,6 @@ class Parameter
 		switch name
 			when 'type'
 				if value is '*' then value = "Object"
-				if value and typeof value is 'string' and value isnt 'void' then value = value.charAt(0).toUpperCase() + value.substr(1)
 				@type = value
 			
 			else

@@ -3,6 +3,40 @@ Property = require './property.js'
 Event = require './event.js'
 Class = require './class.js'
 
+parseParam = (me, arg, def = "Object") ->
+	optional = false
+	n = false
+	found = false
+	
+	if arg[0]?.charAt(0) is '{'
+		type = arg.shift()
+		type = type.substr(1, type.length - 2)
+	else
+		type = def
+	
+	name = arg.shift()
+	if name.charAt(0) is '['
+		name = name.substr(1, name.length - 2)
+		optional = true
+	if name.substr(0, 3) is '...'
+		n = true
+		name = name.substr 3
+	
+	for p in me.params when p.name is name
+		found = p
+	
+	unless found
+		found = new Parameter
+		found.set 'name', name
+		me.params.push found
+		
+	found.set 'type', type
+	found.set 'description', arg.join ' '
+	found.set 'optional', optional
+	if n then found.set 'n', n
+	
+	found
+	
 module.exports = (me) ->
 	unless me.description then return me
 	unless typeof me.description is 'string' then return me
@@ -10,38 +44,30 @@ module.exports = (me) ->
 	lines = me.description.split '\n'
 
 	if me.constructor.name is 'Method'
-		for line, index in lines by -1 when (/^\s*@([^ ]+)[ ]?(.*)$/).exec line
-			lines.splice index, 1
+		for line, index in lines when (/^@([^ ]+)[ ]?(.*)$/).exec line
+			lines[index] = ''
 			arg = RegExp.$2.split ' '
-	
+
 			switch RegExp.$1
 				when 'ignore'
 					return null
 					
 				when 'param'
-					optional = false
-					n = false
+					parseParam me, arg
 					
-					if arg[0]?.charAt(0) is '{'
-						type = arg.shift()
-						type = type.substr(1, type.length - 2)
-					else
-						type = "Object"
+				when 'callback'
+					param = parseParam me, arg, "Function"
 					
-					name = arg.shift()
-					if name.charAt(0) is '['
-						name = name.substr(1, name.length - 2)
-						optional = true
-					if name.substr(0, 3) is '...'
-						n = true
-						name = name.substr 3
+					# Parse callback params
 					
-					for p in me.params when p.name is name
-						p.set 'type', type
-						p.set 'description', arg.join ' '
-						p.set 'optional', optional
-						if n then p.set 'n', n
-				
+					param.set 'params', []
+					
+					while (/^\s@(param) (.*)$/).exec lines[++index]
+						lines[index] = ''
+						arg = RegExp.$2.split ' '
+						
+						parseParam param, arg
+
 				when 'returns'
 					type = arg.shift()
 					if type.charAt(0) is '{' then type = type.substr(1, type.length - 2)
@@ -50,6 +76,12 @@ module.exports = (me) ->
 				
 				when 'version', 'todo', 'see'
 					me.set RegExp.$1, arg.join ' '
+				
+				when 'deprecated'
+					me.set 'deprecated', true
+				
+				when 'path'
+					if arg[0] then me.set 'path', arg.shift()
 				
 				when 'class'
 					transform = true
@@ -73,8 +105,8 @@ module.exports = (me) ->
 		me.set 'description', lines.join '\n'
 
 	else if me.constructor.name is 'Class'
-		for line, index in lines by -1 when (/^\s*@([^ ]+)[ ]?(.*)$/).exec line
-			lines.splice index, 1
+		for line, index in lines when (/^@([^ ]+)[ ]?(.*)$/).exec line
+			lines[index] = ''
 			arg = RegExp.$2.split ' '
 
 			switch RegExp.$1
@@ -107,6 +139,9 @@ module.exports = (me) ->
 				when 'version', 'todo', 'see'
 					me.set RegExp.$1, arg.join ' '
 				
+				when 'path'
+					if arg[0] then me.set 'path', arg.shift()
+				
 				when 'extends'
 					if arg[0]?.charAt(0) is '{'
 						type = arg.shift()
@@ -119,8 +154,8 @@ module.exports = (me) ->
 		me.set 'description', lines.join '\n'
 
 	else if me.constructor.name is 'Module'
-		for line, index in lines by -1 when (/^\s*@([^ ]+)[ ]?(.*)$/).exec line
-			lines.splice index, 1
+		for line, index in lines when (/^@([^ ]+)[ ]?(.*)$/).exec line
+			lines[index] = ''
 			arg = RegExp.$2.split ' '
 
 			switch RegExp.$1

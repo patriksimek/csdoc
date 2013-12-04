@@ -10,6 +10,12 @@ class Property
 	###
 	
 	set: (name, value) ->
-		@[name] = value
+		switch name
+			when 'type'
+				if value is '*' then value = "Object"
+				@type = value
+			
+			else
+				@[name] = value
 
 module.exports = Property

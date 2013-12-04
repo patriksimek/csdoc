@@ -340,16 +340,17 @@ module.exports = (files, options, callback) ->
 	catch ex
 		return callback new Error "Coffee-Script parsing failed: #{ex.message}"
 	
-	if options.type is 'merge' or options.template is 'html' # always merge with html template (temporarily)
-		for module in doc.modules
-			for name, klass of module.classes
-				doc.global.classes[name] = klass
+	if false # disable
+		if options.type is 'merge'# or options.template is 'html' # always merge with html template (temporarily)
+			for module in doc.modules
+				for name, klass of module.classes
+					doc.global.classes[name] = klass
+					
+				for name, method of module.methods
+					doc.global.methods[name] = method
 				
-			for name, method of module.methods
-				doc.global.methods[name] = method
-			
-			module.classes = {}
-			module.methods = {}
+				module.classes = {}
+				module.methods = {}
 	
 	# --- Process classes ---
 	
@@ -429,11 +430,19 @@ module.exports = (files, options, callback) ->
 						method.returns = classes[method.returns]
 							
 					for param in method.params
-						if typeof param.type is 'string' and classes[param.type] and classes[method.returns] isnt klass
+						if typeof param.type is 'string' and classes[param.type] and classes[param.returns] isnt klass
 							param.type = classes[param.type]
 	
 			for name, prop of klass.properties
-				if typeof prop.type is 'string' and classes[prop.type] and classes[method.returns] isnt klass
+				if typeof prop.type is 'string' and classes[prop.type] and classes[prop.returns] isnt klass
 					prop.type = classes[prop.type]
+		
+		for name, method of module.methods
+			if typeof method.returns is 'string' and classes[method.returns] and classes[method.returns] isnt klass
+				method.returns = classes[method.returns]
+					
+			for param in method.params
+				if typeof param.type is 'string' and classes[param.type] and classes[param.returns] isnt klass
+					param.type = classes[param.type]
 
 	callback null, doc

@@ -31,10 +31,10 @@ class Class
 
 		@extends = source
 		
-		for name, method of source.public when not @public.hasOwnProperty name
+		for name, method of source.public when not Object::hasOwnProperty.call @public, name
 			@public[name] = method
 
-		for name, property of source.properties when not @properties.hasOwnProperty name
+		for name, property of source.properties when not Object::hasOwnProperty.call @properties, name
 			@properties[name] = property
 		
 		@

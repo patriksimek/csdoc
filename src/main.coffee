@@ -15,6 +15,15 @@ module.exports = (files, options, callback) ->
 	parser files, options, (err, parsed) ->
 		if err then return callback err
 		
+		# Custom badge
+		
+		options.badge ?= ""
+		
+		# Custom index
+		
+		if options.index
+			options.index = fs.readFileSync require('path').resolve(options.index), 'utf8'
+		
 		# Custom template
 		
 		if options.template instanceof Function
