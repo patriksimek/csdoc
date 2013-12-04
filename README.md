@@ -1,6 +1,6 @@
 # CSDoc [![Dependency Status](https://david-dm.org/patriksimek/csdoc.png)](https://david-dm.org/patriksimek/csdoc) [![NPM version](https://badge.fury.io/js/csdoc.png)](http://badge.fury.io/js/csdoc) [![Build Status](https://secure.travis-ci.org/patriksimek/csdoc.png)](http://travis-ci.org/patriksimek/csdoc)
 
-An API documentation generator for CoffeeScript based on JSDoc for JavaScript. Project is work in intensive progress.
+An API documentation generator for CoffeeScript inspired by [JSDoc](https://github.com/jsdoc3/jsdoc). Project is work in progress.
 
 Contribution is welcome.
 
