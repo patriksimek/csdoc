@@ -6,12 +6,179 @@
 		"global": true,
 		"extends": null,
 		"docs": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+		"version": "1.0",
 		"public": [{
 			"name": "constructor",
 			"description": "Create instance of the class.",
 			"returns": "Object"
+		},{
+			"name": "hasOwnProperty",
+			"params": [{
+				"name": "prop",
+				"type": "String",
+				"description": "The name of the property to test."
+			}],
+			"description": "Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain.",
+			"version": "1.5",
+			"returns": "Boolean"
+		},{
+			"name": "isPrototypeOf",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object whose prototype chain will be searched."
+			}],
+			"description": "Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon.",
+			"version": "1.0",
+			"returns": "Boolean"
+		},{
+			"name": "propertyIsEnumerable",
+			"params": [{
+				"name": "prop",
+				"type": "String",
+				"description": "The name of the property to test."
+			}],
+			"description": "Returns a boolean indicating if the internal [ECMAScript DontEnum attribute](https://developer.mozilla.org/en-US/docs/ECMAScript_DontEnum_attribute) is set.",
+			"version": "1.0",
+			"returns": "Boolean"
+		},{
+			"name": "toLocaleString",
+			"description": "Calls [toString](#toString).",
+			"version": "1.0",
+			"returns": "String"
+		},{
+			"name": "toString",
+			"description": "Returns a string representation of the object.",
+			"version": "1.0",
+			"returns": "String"
+		},{
+			"name": "valueOf",
+			"description": "Returns the primitive value of the specified object.",
+			"version": "1.0",
+			"returns": "Object"
 		}],
 		"static": [{
+			"name": "create",
+			"params": [{
+				"name": "proto",
+				"type": "Object",
+				"description": "The object which should be the prototype of the newly-created object."
+			},{
+				"name": "propertiesObject",
+				"type": "Object",
+				"optional": true,
+				"description": "If specified and not undefined, an object whose enumerable own properties (that is, those properties defined upon itself and not enumerable properties along its prototype chain) specify property descriptors to be added to the newly-created object, with the corresponding property names. These properties correspond to the second argument of [Object.defineProperties](#defineProperties)."
+			}],
+			"description": "Creates a new object with the specified prototype object and properties.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "defineProperty",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object on which to define the property."
+			},{
+				"name": "prop",
+				"type": "Object",
+				"description": "The name of the property to be defined or modified."
+			},{
+				"name": "descriptor",
+				"type": "Object",
+				"description": "The descriptor for the property being defined or modified."
+			}],
+			"description": "Adds the named property described by a given descriptor to an object.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "defineProperties",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object on which to define or modify properties."
+			},{
+				"name": "props",
+				"type": "Object",
+				"description": "An object whose own enumerable properties constitute descriptors for the properties to be defined or modified."
+			}],
+			"description": "Adds the named properties described by the given descriptors to an object.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "freeze",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object to freeze."
+			}],
+			"description": "Freezes an object: other code can't delete or change any properties.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "getOwnPropertyDescriptor",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object in which to look for the property."
+			},{
+				"name": "prop",
+				"type": "Object",
+				"description": "The name of the property whose description is to be retrieved."
+			}],
+			"description": "Returns a property descriptor for a named property on an object.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "getOwnPropertyNames",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object whose enumerable and non-enumerable own properties are to be returned."
+			}],
+			"description": "Returns an array containing the names of all of the given object's **own** enumerable and non-enumerable properties.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "getPrototypeOf",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object whose prototype is to be returned."
+			}],
+			"description": "Returns the prototype of the specified object.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "isExtensible",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object which should be checked."
+			}],
+			"description": "Determines if extending of an object is allowed.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "isFrozen",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object which should be checked."
+			}],
+			"description": "Determines if an object was frozen.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "isSealed",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object which should be checked."
+			}],
+			"description": "Determines if an object is sealed.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
 			"name": "keys",
 			"params": [{
 				"name": "obj",
@@ -19,7 +186,28 @@
 				"description": "The object whose enumerable own properties are to be returned."
 			}],
 			"description": "Returns an array containing the names of all of the given object's own enumerable properties.",
+			"version": "1.8.5",
 			"returns": "Array"
+		},{
+			"name": "preventExtensions",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object which should be made non-extensible."
+			}],
+			"description": "Prevents any extensions of an object.",
+			"version": "1.8.5",
+			"returns": "Object"
+		},{
+			"name": "seal",
+			"params": [{
+				"name": "obj",
+				"type": "Object",
+				"description": "The object which should be sealed."
+			}],
+			"description": "Prevents other code from deleting properties of an object.",
+			"version": "1.8.5",
+			"returns": "Object"
 		}]
 	},{
 		"name": "Array",
@@ -96,5 +284,15 @@
 		"global": true,
 		"extends": "Object",
 		"docs": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"
+	}],
+	"methods": [{
+		"name": "isNaN",
+		"builtin": true,
+		"params": [{
+			"name": "testValue",
+			"type": "Object",
+			"description": "The value to be tested."
+		}],
+		"description": "Determines whether a value is NaN or not."
 	}]
 }
