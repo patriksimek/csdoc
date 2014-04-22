@@ -26,7 +26,7 @@ mixin klass(klass)
 mixin methods(source, klass)
 	ul.nav.cs-methods
 		- each method in source
-			mixin method(method, klass)					
+			+method(method, klass)
 												
 mixin method(method, klass)
 	- var paramsHasDesc = false

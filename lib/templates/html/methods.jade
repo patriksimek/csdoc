@@ -2,7 +2,7 @@ extends html
 include _common
 
 block navigation
-	ul.nav		
+	ul.nav
 		- for module in modules
 			- if (Object.keys(module.methods).length)
 				li: a(href="#") #{module.name}
@@ -15,4 +15,4 @@ block content
 		- for module in modules
 			- if (Object.keys(module.methods).length)
 				h3.cs-header #{module.name}
-				mixin methods(module.methods)
+				+methods(module.methods)

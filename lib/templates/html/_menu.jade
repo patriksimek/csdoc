@@ -5,7 +5,7 @@
 		- else
 			h5 default
 		
-		ul.nav		
+		ul.nav
 			- for klass in ns.classes
 				- if (!klass.builtin)
 					li: a(href=level + klass.url) #{klass.name}

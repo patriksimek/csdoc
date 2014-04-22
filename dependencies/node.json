@@ -1,6 +1,6 @@
 {
 	"builtin": true,
-	"lasses": [{
+	"classes": [{
 		"name": "EventEmitter",
 		"builtin": true,
 		"url": "http://nodejs.org/api/events.html#events_class_events_eventemitter",
@@ -13,12 +13,92 @@
 				"description": "Event name."
 			},{
 				"name": "listener",
-				"type" "Function",
+				"type": "Function",
 				"description": "Event listener."
 			}],
 			"description": "Adds a listener to the end of the listeners array for the specified event. Returns emitter, so calls can be chained.",
 			"returns": "EventEmitter"
-		}]
+		},{
+			"name": "on",
+			"params": [{
+				"name": "event",
+				"type": "String",
+				"description": "Event name."
+			},{
+				"name": "listener",
+				"type": "Function",
+				"description": "Event listener."
+			}],
+			"description": "Adds a listener to the end of the listeners array for the specified event. Returns emitter, so calls can be chained.",
+			"returns": "EventEmitter"
+		},{
+			"name": "once",
+			"params": [{
+				"name": "event",
+				"type": "String",
+				"description": "Event name."
+			},{
+				"name": "listener",
+				"type": "Function",
+				"description": "Event listener."
+			}],
+			"description": "Adds a **one time** listener for the event. This listener is invoked only the next time the event is fired, after which it is removed. Returns emitter, so calls can be chained.",
+			"returns": "EventEmitter"
+		},{
+			"name": "removeListener",
+			"params": [{
+				"name": "event",
+				"type": "String",
+				"description": "Event name."
+			},{
+				"name": "listener",
+				"type": "Function",
+				"description": "Event listener."
+			}],
+			"description": "Remove a listener from the listener array for the specified event. **Caution**: changes array indices in the listener array behind the listener. Returns emitter, so calls can be chained.",
+			"returns": "EventEmitter"
+		},{
+			"name": "removeAllListeners",
+			"params": [{
+				"name": "event",
+				"type": "String",
+				"description": "Event name."
+			}],
+			"description": "Removes all listeners, or those of the specified event. Returns emitter, so calls can be chained.",
+			"returns": "EventEmitter"
+		},{
+			"name": "setMaxListeners",
+			"params": [{
+				"name": "n",
+				"type": "Number",
+				"description": "Limit."
+			}],
+			"description": "By default EventEmitters will print a warning if more than 10 listeners are added for a particular event. This is a useful default which helps finding memory leaks. Obviously not all Emitters should be limited to 10. This function allows that to be increased. Set to zero for unlimited.",
+			"returns": "EventEmitter"
+		},{
+			"name": "listeners",
+			"params": [{
+				"name": "event",
+				"type": "String",
+				"description": "Event name."
+			}],
+			"description": "Returns an array of listeners for the specified event.",
+			"returns": "Array"
+		},{
+			"name": "emit",
+			"params": [{
+				"name": "event",
+				"type": "String",
+				"description": "Event name."
+			},{
+				"name": "arg",
+				"type": "Object",
+				"description": "Arguments.",
+				"n": true
+			}],
+			"description": "Execute each of the listeners in order with the supplied arguments. Returns `true` if event had listeners, `false` otherwise.",
+			"returns": "Array"
+		}],
 		"static": [{
 			"name": "listenerCount",
 			"params": [{

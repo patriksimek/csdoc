@@ -15,6 +15,8 @@ module.exports = (files, options, callback) ->
 	parser files, options, (err, parsed) ->
 		if err then return callback err
 		
+		options.title ?= "CSDoc"
+		
 		# Custom badge
 		
 		options.badge ?= ""
